@@ -1,0 +1,93 @@
+plugins:
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - "db/*"
+    - "bin/*"
+    - "spec/*"
+    - "vendor/**/*"
+    - "vendor/bundle/**/*"
+  SuggestExtensions: false
+
+Layout/LineLength:
+  Max: 120
+
+Layout/IndentationWidth:
+  Width: 2
+
+Layout/IndentationStyle:
+  EnforcedStyle: spaces
+
+Layout/ArgumentAlignment:
+  Enabled: true
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+  Max: 30
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/ModuleLength:
+  Max: 180
+
+Metrics/ClassLength:
+  Max: 180
+
+Metrics/AbcSize:
+  Max: 30
+
+Style/Documentation:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+Lint/UselessAssignment:
+  Enabled: true
+
+Lint/DeprecatedClassMethods:
+  Enabled: true
+
+Lint/EnsureReturn:
+  Enabled: true
+
+Lint/RedundantRequireStatement:
+  Enabled: true
+
+# Use `foo {}` not `foo{}`.
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+
+# Use `foo { bar }` not `foo {bar}`.
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+  EnforcedStyleForEmptyBraces: space
+
+# Use `{ a: 1 }` not `{a:1}`.
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+
+Layout/SpaceInsideParens:
+  Enabled: true
+
+Lint/MissingCopEnableDirective:
+  Enabled: true
+
+Lint/RequireParentheses:
+  Enabled: true
