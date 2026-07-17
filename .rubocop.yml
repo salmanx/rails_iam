@@ -6,7 +6,7 @@ AllCops:
   Exclude:
     - "db/*"
     - "bin/*"
-    - "spec/*"
+    - "spec/**/*"
     - "vendor/**/*"
     - "vendor/bundle/**/*"
   SuggestExtensions: false
