@@ -91,3 +91,6 @@ Lint/MissingCopEnableDirective:
 
 Lint/RequireParentheses:
   Enabled: true
+
+Lint/EmptyClass:
+  Enabled: false

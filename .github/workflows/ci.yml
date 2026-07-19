@@ -43,6 +43,10 @@ jobs:
           ruby-version: 3.4.3
           bundler-cache: true
 
+      - name: Prepare Test Database
+        run: |
+          RAILS_ENV=test bundle exec rails db:migrate
+
       - name: Run tests
         env:
           RAILS_ENV: test

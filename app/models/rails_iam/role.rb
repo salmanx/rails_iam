@@ -9,6 +9,6 @@ module RailsIam
 
     validates :name, presence: true, uniqueness: true
 
-    normalizes :name, with: ->(name) { name.to_s.parameterize(separator: "_").strip }
+    normalizes :name, with: ->(code) { code.to_s.downcase.strip }
   end
 end

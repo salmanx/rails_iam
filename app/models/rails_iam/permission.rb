@@ -9,6 +9,6 @@ module RailsIam
 
     validates :code, presence: true, uniqueness: true
 
-    normalizes :code, with: ->(code) { code.to_s.parameterize(separator: "_").strip }
+    normalizes :code, with: ->(code) { code.to_s.downcase.strip }
   end
 end

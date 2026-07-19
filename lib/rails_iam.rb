@@ -3,7 +3,8 @@
 require "rails_iam/version"
 require "rails_iam/engine"
 
-require "rails_iam/configuration/configuration"
+require "rails_iam/configuration"
+require "rails_iam/config/authorization"
 
 module RailsIam
   class << self
