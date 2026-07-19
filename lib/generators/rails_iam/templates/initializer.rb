@@ -1,0 +1,137 @@
+# frozen_string_literal: true
+
+#
+# RailsIam Configuration
+#
+# Use this file to configure how your application handles authentication,
+# authorization scopes, JWT token properties, caching, and error handling.
+#
+RailsIam.configure do |config|
+  # =========================================================================
+  # Host Application Integration
+  # =========================================================================
+
+  # - The class name of your main User/Account model which will be used to login
+  # - It's been used throughout RailsIam for authentication, authorization, associations and user lookup.
+  # - Configure this only if you use a different model
+  #   or you have your own authentication mechanism (devise or jwt/bcrypt)
+  # - Default: 'RailsIam::User'
+  # config.user_class = 'RailsIam::User'
+
+  # - The method name your controllers use to look up the currently active session user.
+  # - Default: :current_user
+  # config.current_user_method = :current_user
+
+  # =========================================================================
+  # Authentication Settings (config.authentication)
+  # =========================================================================
+
+  # - The key used when storing or reading the access token from cookies or parameters.
+  # - Default: 'access_token'
+  # config.authentication.access_token_key = 'access_token'
+
+  # - The key used when storing or reading the long-lived refresh token.
+  # - Default: 'refresh_token'
+  # config.authentication.refresh_token_key = 'refresh_token'
+
+  # - Supported authentication delivery strategies.
+  # - Options: [:cookie], [:bearer], or combined [:cookie, :bearer]
+  # - For :bearer, the gem expects the token in authorization header with `Bearer your_token`
+  # - Default: [:cookie]
+  # config.authentication.authentication_strategies = [:cookie] # httponly
+
+  # - Refresh Token Transport, only needed if authentication_strategies uses :bearer
+  # - Determines how RailsIam receives the refresh token for
+  #   refresh and sign-out requests when using bearer authentication.
+  # - Will use the same @refresh_token_key to get the header
+  #   i,e: request.get_header(refresh_token_key.upcase) -> HTTP_X_REFRESH_TOKEN
+  # - Options: :header, :request_body
+  # - Default: :header
+  # config.authentication.refresh_token_transport = :header
+
+  # - Session persistence limit strategy.
+  #   [:single] - Forces one active device/session per user at any time (invalidates old tokens).
+  #   [:multi]  - Allows concurrent login sessions across multiple devices or browsers.
+  # - Default: :multi
+  # config.authentication.session_strategy = :multi
+
+  #
+  # Built-in Authentication Routes
+  #
+  # - Routes exposed by RailsIam when using its built-in authentication
+  #   controllers. Put `nil` if  you don't  want RailsIam to provide
+  #   the HTTP sign-in, sign-out and refresh token endpoints. You don't need to add
+  #   anything to your host application. RailsIam  will map this routes
+  #   to your host application i,e: example.com/auth/sign_in
+  #
+  # You can also:
+  # - Use Devise (or another authentication library) and leave these default nil.
+  # - Build your own authentication controllers and use RailsIam's
+  #   JWT encoder/decoder, refresh token services, or login/logout
+  #   services without exposing the built-in routes.
+  # - Mix both approaches (e.g. use RailsIam's sign-in route but your
+  #   own sign-out route).
+  # - Use nil if your application already have authentication routes
+  # config.authentication.sign_in_path = '/auth/sign_in'
+  # config.authentication.sign_out_path = '/auth/sign_out'
+  # config.authentication.refresh_token_path = '/auth/refresh
+
+  # - Custom system error messages emitted during authentication edge cases.
+  # - Configure the error messages if you need different messages
+  # config.authentication.token_error          = 'Invalid token'
+  # config.authentication.token_expired_error  = 'Token has expired'
+  # config.authentication.user_not_found_error = 'User not found'
+  # config.authentication.authentication_error = 'Credential mismatch'
+
+  # =========================================================================
+  # Authorization & Cache Settings (config.authorization)
+  # =========================================================================
+
+  # - Custom formatters for policy denial messaging.
+  # - Accepts plain Strings, dynamic blocks, or Lambdas with positional keywords.
+  #
+  # config.authorization.missing_role_error = lambda do |required:, actual:|
+  #   "Missing roles: #{required}. You only have: #{actual}"
+  # end
+  #
+  # config.authorization.missing_permission_error = lambda do |required:|
+  #   "Missing permission(s): #{required.join(', ')}"
+  # end
+
+  # - The store engine to cache resolved roles and permissions queries for low DB footprints.
+  # - Default: Rails.cache
+  # config.authorization.cache_store = Rails.cache
+
+  # - Lifespan duration for records cached within the authorization engine layer.
+  # - Default: 15.minutes
+  # config.authorization.cache_ttl = 15.minutes
+
+  # =========================================================================
+  # JWT Cryptography Settings (config.jwt)
+  # =========================================================================
+
+  # - Secret verification string used to sign security tokens.
+  # - Default: ENV['JWT_SECRET'] or Rails.application.secret_key_base
+  # config.jwt.secret = ENV['JWT_SECRET']
+
+  # - Digital signature algorithm category mapping.
+  # - Default: 'HS256'
+  # config.jwt.algorithm = 'HS256'
+
+  # - Jwt expiry, default to 15 minutes, same as access token in cookie expiry
+  # config.jwt.jwt_expires_in = 15.minutes
+
+  # - Optional security claim validations (RFC 7519 standard targets).
+  # - Leave nil to disable strict validation checks.
+  # - You can also dynamically set them in `extra_claims` at `JwtEncoder`
+  # config.jwt.issuer   = 'https://yourdomain.com'
+  # config.jwt.audience = 'your_application_client_id'
+
+  # - How long an Access Token remains usable before forcing validation updates.
+  # - Default: 15.minutes
+  # config.jwt.access_token_expires_in = 15.minutes
+
+  # - Lifespan for the Refresh Token used to request replacement access tokens.
+  # - Default: 30.days
+  # config.jwt.refresh_token_expires_in = 30.days
+end

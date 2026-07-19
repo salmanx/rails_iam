@@ -6,7 +6,7 @@ AllCops:
   Exclude:
     - "db/*"
     - "bin/*"
-    - "spec/*"
+    - "spec/**/*"
     - "vendor/**/*"
     - "vendor/bundle/**/*"
   SuggestExtensions: false
@@ -91,3 +91,6 @@ Lint/MissingCopEnableDirective:
 
 Lint/RequireParentheses:
   Enabled: true
+
+Lint/EmptyClass:
+  Enabled: false
