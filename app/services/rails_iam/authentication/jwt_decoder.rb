@@ -22,7 +22,7 @@ module RailsIam
 
         decoded.first.deep_symbolize_keys
       rescue JWT::ExpiredSignature
-        raise InvalidToken, "Token expired"
+        raise InvalidToken, RailsIam.configuration.authentication.token_expired_error
       rescue JWT::DecodeError => e
         raise InvalidToken, e.message
       end
