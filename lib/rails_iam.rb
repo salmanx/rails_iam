@@ -5,6 +5,7 @@ require "rails_iam/engine"
 
 require "rails_iam/configuration"
 require "rails_iam/config/authorization"
+require "rails_iam/config/jwt"
 
 module RailsIam
   class << self
