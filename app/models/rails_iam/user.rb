@@ -10,6 +10,7 @@ module RailsIam
     has_many :granted_permissions, through: :user_permissions, source: :permission
     has_many :user_denied_permissions, dependent: :destroy, class_name: "RailsIam::UserDeniedPermission"
     has_many :denied_permissions, through: :user_denied_permissions, source: :permission
+    has_many :refresh_tokens, dependent: :destroy, class_name: "RailsIam::RefreshToken"
 
     validates :email, presence: true, uniqueness: true
     validates :password, presence: true, length: { minimum: 6, maximum: 20 }, if: :password

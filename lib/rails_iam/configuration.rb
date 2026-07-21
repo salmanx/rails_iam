@@ -2,14 +2,15 @@
 
 module RailsIam
   class Configuration
-    attr_reader :authorization
+    attr_reader :authorization, :jwt, :authentication
 
-    attr_accessor :user_class,
-                  :current_user_method
+    attr_accessor :user_class, :current_user_method
 
     def initialize
       # Each concern has its own configuration object to keep the
       @authorization = RailsIam::Config::Authorization.new
+      @jwt = RailsIam::Config::Jwt.new
+      @authentication = RailsIam::Config::Authentication.new
 
       # Host Application User Model, defaults to RailsIam::User
       # Used throughout RailsIam for authentication, authorization associations, and user lookup.

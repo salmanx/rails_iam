@@ -6,7 +6,7 @@ require "rails_iam/engine"
 require "rails_iam/configuration"
 require "rails_iam/config/authorization"
 require "rails_iam/config/jwt"
-
+require "rails_iam/config/authentication"
 module RailsIam
   class << self
     attr_writer :configuration
