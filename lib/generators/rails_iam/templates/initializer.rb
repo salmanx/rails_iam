@@ -40,6 +40,12 @@ RailsIam.configure do |config|
   # - Default: [:cookie]
   # config.authentication.authentication_strategies = [:cookie] # httponly
 
+  # - Cookie configuration (Web / Cookie-based Strategy)
+  # - Configure the security and behavior properties for session cookies issued by
+  # - the RailsIam engine. These settings strictly apply when using the :cookie authentication strategy.
+  # - Default: { httponly: true, secure: Rails.env.production?, same_site: :lax, }
+  # config.authentication.cookie_options = { httponly: true, secure: Rails.env.production?, same_site: :lax, }
+
   # - Refresh Token Transport, only needed if authentication_strategies uses :bearer
   # - Determines how RailsIam receives the refresh token for
   #   refresh and sign-out requests when using bearer authentication.
@@ -78,10 +84,12 @@ RailsIam.configure do |config|
 
   # - Custom system error messages emitted during authentication edge cases.
   # - Configure the error messages if you need different messages
-  # config.authentication.token_error          = 'Invalid token'
-  # config.authentication.token_expired_error  = 'Token has expired'
-  # config.authentication.user_not_found_error = 'User not found'
-  # config.authentication.authentication_error = 'Credential mismatch'
+  # config.authentication.token_error          = 'The provided authentication token is invalid or malformed.'
+  # config.authentication.token_expired_error  = 'The authentication token has expired. Please re-authenticate.'
+  # config.authentication.authentication_error = 'Invalid email or password.'
+  # config.authentication.authentication_strategy_error = 'Unknown authentication strategy. Please configure it from rails_iam initializer'
+  # config.authentication.session_strategy_error = 'Unknown session strategy. Please configure it from rails_iam initializer'
+  # config.authentication.refresh_token_transport_error = 'Unknown refresh token transport. Please configure it from rails_iam initializer'
 
   # =========================================================================
   # Authorization & Cache Settings (config.authorization)
@@ -97,6 +105,10 @@ RailsIam.configure do |config|
   # config.authorization.missing_permission_error = lambda do |required:|
   #   "Missing permission(s): #{required.join(', ')}"
   # end
+
+  # - Error message if permission is not applied on endpoint
+  # - Example: No authorization rule for users#show
+  # config.authorization.authorization_rule_error = "No authorization rule for "
 
   # - The store engine to cache resolved roles and permissions queries for low DB footprints.
   # - Default: Rails.cache

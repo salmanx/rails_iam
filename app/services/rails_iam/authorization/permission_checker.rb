@@ -29,7 +29,7 @@ module RailsIam
 
         return true if success
 
-        raise Authorization::Exceptions::MissingPermissionError.new(
+        raise RailsIam::Authorization::Exceptions::MissingPermissionError.new(
           required: @context.required_permissions,
         )
       end

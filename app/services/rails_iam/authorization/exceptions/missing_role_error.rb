@@ -4,8 +4,10 @@ module RailsIam
   module Authorization
     module Exceptions
       class MissingRoleError < ForbiddenError
+        include RailsIam::ConfigLoader
+
         def initialize(required:, actual:)
-          formatter = RailsIam.configuration.authorization.missing_role_error
+          formatter = missing_role_error
 
           message = case formatter
                     # 1. If the user configured a plain String, use it directly

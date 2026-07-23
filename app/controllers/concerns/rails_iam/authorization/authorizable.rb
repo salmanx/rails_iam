@@ -4,15 +4,15 @@ module RailsIam
   module Authorization
     module Authorizable
       extend ActiveSupport::Concern
+      include RailsIam::AuthConcern
+      include RailsIam::ConfigLoader
 
       included do
         class_attribute :authorization_rules, instance_accessor: false, default: []
         class_attribute :skip_authorization_rules, instance_accessor: false, default: []
-
-        before_action :run_authorization
-
-        rescue_from RailsIam::Authorization::Exceptions::ForbiddenError,
-                    with: :handle_rails_iam_forbidden_error
+        before_action :run_authorization!
+        rescue_from RailsIam::Authorization::Exceptions::ForbiddenError, with: :render_permission_error
+        rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_auth_error
       end
 
       class_methods do
@@ -50,24 +50,19 @@ module RailsIam
 
       private
 
-      def run_authorization
+      def run_authorization!
         return if skip_authorization?
 
         user_method = RailsIam.configuration.current_user_method
 
-        # TODO: will replace with Auth exception instead forbidden
-        unless respond_to?(user_method, true)
-          raise Authorization::Exceptions::ForbiddenError,
-                "Authentication required"
-        end
+        raise RailsIam::Authentication::Exceptions::AuthenticationError, token_error unless respond_to?(user_method, true)
 
         active_user = public_send(user_method)
 
         rule = authorization_rule
 
         if rule.nil? || (rule.roles.empty? && rule.permissions.empty?)
-          raise Authorization::Exceptions::ForbiddenError,
-                "No authorization rule for #{controller_name}##{action_name}"
+          raise RailsIam::Authorization::Exceptions::ForbiddenError, authorization_rule_error
         end
 
         authorize!(**rule.authorizer_arguments, user: active_user)
@@ -79,7 +74,7 @@ module RailsIam
         role_match: :any,
         permission_match: :all
       )
-        Authorization::Authorizer.call(
+        RailsIam::Authorization::Authorizer.call(
           user: user,
           required_roles: required_roles,
           required_permissions: required_permissions,
@@ -98,20 +93,6 @@ module RailsIam
         self.class.skip_authorization_rules.any? do |rule|
           rule.matches?(action_name)
         end
-      end
-
-      def handle_rails_iam_forbidden_error(exception)
-        render json: {
-          error: "Forbidden",
-          message: exception.message,
-        }, status: :forbidden
-      end
-
-      def handle_rails_iam_authentication_error(exception)
-        render json: {
-          error: "Unauthorized",
-          message: exception.message,
-        }, status: :unauthorized
       end
     end
   end
