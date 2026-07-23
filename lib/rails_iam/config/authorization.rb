@@ -5,6 +5,7 @@ module RailsIam
     class Authorization
       attr_accessor :missing_role_error,
                     :missing_permission_error,
+                    :authorization_rule_error,
                     :cache_store,
                     :cache_ttl
 
@@ -17,6 +18,8 @@ module RailsIam
         @missing_permission_error = lambda do |required:|
           "Missing permission(s): #{required.join(', ')}"
         end
+
+        @authorization_rule_error = "No authorization rule applied for"
 
         # The store engine to cache resolved roles and permissions queries for low DB footprints.
         @cache_store = Rails.cache

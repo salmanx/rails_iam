@@ -12,7 +12,7 @@ AllCops:
   SuggestExtensions: false
 
 Layout/LineLength:
-  Max: 120
+  Max: 140
 
 Layout/IndentationWidth:
   Width: 2

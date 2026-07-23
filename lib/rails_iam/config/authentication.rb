@@ -10,12 +10,16 @@ module RailsIam
                     :sign_in_path,
                     :sign_out_path,
                     :refresh_token_path,
+                    :refresh_token_transport,
                     :access_token_expires_in,
                     :refresh_token_expires_in,
                     :token_error,
                     :token_expired_error,
-                    :user_not_found_error,
-                    :authentication_error
+                    :authentication_error,
+                    :authentication_strategy_error,
+                    :session_strategy_error,
+                    :refresh_token_transport_error,
+                    :cookie_options
 
       def initialize
         # The key used when storing or reading the access token from cookies or parameters.
@@ -26,11 +30,15 @@ module RailsIam
 
         # Authentication Strategy
         # Supported: [:cookie], [:bearer], or combined [:cookie, :bearer]
-        @authentication_strategies = [:cookie]
+        @authentication_strategies = %i[cookie]
 
         # Session Strategy, allowing user to login from multiple device at the same time
         # Supported: :single || :multi
         @session_strategy = :multi
+
+        # Determines how RailsIam receives the refresh token for :bearer strategy
+        # Supported: :header || :request_body
+        @refresh_token_transport = :header
 
         # Authentication Endpoints
         @sign_in_path = "/auth/sign_in"
@@ -41,11 +49,16 @@ module RailsIam
         @access_token_expires_in = 15.minutes
         @refresh_token_expires_in = 30.days
 
+        # cookie options
+        @cookie_options = { httponly: true, secure: Rails.env.production?, same_site: :lax }.freeze
+
         # Authentication Messages
         @token_error = "The provided authentication token is invalid or malformed."
-        @token_expired_error = "The authentication session has expired. Please re-authenticate."
-        @user_not_found_error = "Invalid email address or password."
-        @authentication_error = "Invalid email address or password."
+        @token_expired_error = "The authentication token has expired. Please re-authenticate."
+        @authentication_error = "Invalid email or password."
+        @authentication_strategy_error = "Unknown authentication strategy. Please configure it from rails_iam initializer"
+        @session_strategy_error = "Unknown session strategy. Please configure it from rails_iam initializer"
+        @refresh_token_transport_error = "Unknown refresh token transport. Please configure it from rails_iam initializer"
       end
     end
   end

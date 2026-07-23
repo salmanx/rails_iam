@@ -24,7 +24,8 @@ module RailsIam
       def call
         RoleChecker.call(@context)
         PermissionChecker.call(@context)
-        true
+
+        true # success is the absence of an exception
       end
     end
   end

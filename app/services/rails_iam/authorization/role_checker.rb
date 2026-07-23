@@ -25,7 +25,7 @@ module RailsIam
 
         return true if success
 
-        raise Authorization::Exceptions::MissingRoleError.new(
+        raise RailsIam::Authorization::Exceptions::MissingRoleError.new(
           required: @context.required_roles,
           actual: @context.roles,
         )

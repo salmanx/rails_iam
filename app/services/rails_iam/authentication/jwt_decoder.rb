@@ -5,11 +5,14 @@ require "jwt"
 module RailsIam
   module Authentication
     class JwtDecoder < RailsIam::RailsIamService
+      include RailsIam::ConfigLoader
+
       class InvalidToken < StandardError; end
 
-      def initialize(token)
+      def initialize(token, headers = {})
         super()
         @token = token
+        @headers = headers
       end
 
       def call
@@ -17,19 +20,19 @@ module RailsIam
           token,
           jwt_secret_key,
           true,
-          { algorithm: jwt_algorithm, verify_jti: true },
+          { algorithm: jwt_algorithm, verify_jti: true }.merge(headers),
         )
 
         decoded.first.deep_symbolize_keys
       rescue JWT::ExpiredSignature
-        raise InvalidToken, RailsIam.configuration.authentication.token_expired_error
-      rescue JWT::DecodeError => e
-        raise InvalidToken, e.message
+        raise InvalidToken, token_expired_error
+      rescue JWT::DecodeError
+        raise InvalidToken, token_error
       end
 
       private
 
-      attr_reader :token
+      attr_reader :token, :headers
     end
   end
 end

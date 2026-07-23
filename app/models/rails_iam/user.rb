@@ -16,5 +16,9 @@ module RailsIam
     validates :password, presence: true, length: { minimum: 6, maximum: 20 }, if: :password
 
     normalizes :email, with: ->(email) { email.to_s.downcase.strip }
+
+    def as_json(options = {})
+      super.except("password_digest")
+    end
   end
 end
