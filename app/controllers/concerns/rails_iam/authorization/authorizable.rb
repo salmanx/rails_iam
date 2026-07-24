@@ -11,8 +11,8 @@ module RailsIam
         class_attribute :authorization_rules, instance_accessor: false, default: []
         class_attribute :skip_authorization_rules, instance_accessor: false, default: []
         before_action :run_authorization!
-        rescue_from RailsIam::Authorization::Exceptions::ForbiddenError, with: :render_permission_error
-        rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_auth_error
+        rescue_from RailsIam::Authorization::Exceptions::AuthorizationError, with: :render_authorization_error
+        rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_authentication_error
       end
 
       class_methods do
@@ -62,7 +62,7 @@ module RailsIam
         rule = authorization_rule
 
         if rule.nil? || (rule.roles.empty? && rule.permissions.empty?)
-          raise RailsIam::Authorization::Exceptions::ForbiddenError, authorization_rule_error
+          raise RailsIam::Authorization::Exceptions::AuthorizationError, authorization_rule_error
         end
 
         authorize!(**rule.authorizer_arguments, user: active_user)

@@ -36,7 +36,7 @@ module RailsIam
       end
     end
 
-    def render_permission_error(exception)
+    def render_authorization_error(exception)
       render json: {
         message: exception.message,
         code: "forbidden".upcase,
@@ -45,7 +45,7 @@ module RailsIam
       }, status: :forbidden
     end
 
-    def render_auth_error(exception)
+    def render_authentication_error(exception)
       render json: {
         message: exception.message,
         code: "unauthorized".upcase,

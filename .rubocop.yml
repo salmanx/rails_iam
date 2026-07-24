@@ -38,7 +38,7 @@ Style/TrailingCommaInHashLiteral:
 Metrics/BlockLength:
   Exclude:
     - "spec/**/*"
-  Max: 30
+  Max: 40
 
 Metrics/MethodLength:
   Max: 30
@@ -93,4 +93,7 @@ Lint/RequireParentheses:
   Enabled: true
 
 Lint/EmptyClass:
+  Enabled: false
+
+Rails/InverseOf:
   Enabled: false

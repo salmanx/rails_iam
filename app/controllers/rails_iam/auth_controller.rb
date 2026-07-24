@@ -6,7 +6,7 @@ module RailsIam
     include RailsIam::AuthConcern
     include RailsIam::ConfigLoader
 
-    rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_auth_error
+    rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_authentication_error
 
     def sign_in
       result = RailsIam::Authentication::Login.call(

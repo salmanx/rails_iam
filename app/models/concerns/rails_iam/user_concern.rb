@@ -5,14 +5,37 @@ module RailsIam
     extend ActiveSupport::Concern
 
     included do
-      has_many :user_roles, dependent: :destroy, class_name: "RailsIam::UserRole"
-      has_many :roles, through: :user_roles, class_name: "RailsIam::Role"
+      has_many :user_roles,
+               class_name: "RailsIam::UserRole",
+               foreign_key: :user_id,
+               dependent: :destroy
 
-      has_many :user_permissions, dependent: :destroy, class_name: "RailsIam::UserPermission"
-      has_many :granted_permissions, through: :user_permissions, source: :permission
+      has_many :roles,
+               through: :user_roles,
+               source: :role
 
-      has_many :user_denied_permissions, dependent: :destroy, class_name: "RailsIam::UserDeniedPermission"
-      has_many :denied_permissions, through: :user_denied_permissions, source: :permission
+      has_many :user_permissions,
+               class_name: "RailsIam::UserPermission",
+               foreign_key: :user_id,
+               dependent: :destroy
+
+      has_many :granted_permissions,
+               through: :user_permissions,
+               source: :permission
+
+      has_many :user_denied_permissions,
+               class_name: "RailsIam::UserDeniedPermission",
+               foreign_key: :user_id,
+               dependent: :destroy
+
+      has_many :denied_permissions,
+               through: :user_denied_permissions,
+               source: :permission
+
+      has_many :refresh_tokens,
+               class_name: "RailsIam::RefreshToken",
+               foreign_key: :user_id,
+               dependent: :destroy
 
       scope :with_allowed_permissions, -> { includes(user_permissions: :permission) }
       scope :with_denied_permissions, -> { includes(user_denied_permissions: :permission) }
