@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsIam
   module ControllerDsl
     extend ActiveSupport::Concern
@@ -13,7 +15,7 @@ module RailsIam
             include RailsIam::Authorization::Authorizable
 
           else
-            raise ArgumentError, "Unknown RailsIam feature: #{feature.inspect}"
+            raise ArgumentError, "Unknown RailsIam feature: #{feature.inspect}, only support :authentication and :authorization"
           end
         end
       end
