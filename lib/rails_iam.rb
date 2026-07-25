@@ -10,7 +10,6 @@ require "rails_iam/config/authentication"
 require "rails_iam/controller_dsl"
 require "rails_iam/model_dsl"
 
-# keep  engine require at bottom
 require "rails_iam/engine"
 module RailsIam
   class << self

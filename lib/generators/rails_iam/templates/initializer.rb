@@ -118,6 +118,12 @@ RailsIam.configure do |config|
   # - Default: 15.minutes
   # config.authorization.cache_ttl = 15.minutes
 
+  # - Controller namespaces excluded from automatic authorization.
+  # - Use this when a third-party library or Rails engine (such as Devise, or another mounted engine) provides controllers
+  # - that inherit from your ApplicationController but should not be subject to RailsIam authorization.
+  # - Example: [/\ADevise::/, /\ARailsIam::/]
+  # config.authorization.excluded_controller_patterns = []
+
   # =========================================================================
   # JWT Cryptography Settings (config.jwt)
   # =========================================================================

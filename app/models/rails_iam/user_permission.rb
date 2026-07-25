@@ -6,5 +6,7 @@ module RailsIam
     belongs_to :user, class_name: RailsIam.configuration.user_class
 
     validates :permission_id, uniqueness: { scope: :user_id }
+
+    after_commit -> { RailsIam::Authorization::Cache.delete_all(user_id) }
   end
 end

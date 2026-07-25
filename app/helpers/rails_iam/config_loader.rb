@@ -36,7 +36,8 @@ module RailsIam
     # Authorization configuration
     def_delegators :"RailsIam.configuration.authorization",
                    :missing_permission_error,
-                   :missing_role_error
+                   :missing_role_error,
+                   :excluded_controller_patterns
 
     def authorization_rule_error
       error = RailsIam.configuration.authorization.authorization_rule_error

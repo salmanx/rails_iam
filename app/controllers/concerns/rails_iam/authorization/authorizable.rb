@@ -53,19 +53,33 @@ module RailsIam
       def run_authorization!
         return if skip_authorization?
 
+        user = current_authenticated_user
+
+        rule = authorization_rule!
+
+        authorize!(**rule.authorizer_arguments, user: user)
+      end
+
+      def current_authenticated_user
         user_method = RailsIam.configuration.current_user_method
 
         raise RailsIam::Authentication::Exceptions::AuthenticationError, token_error unless respond_to?(user_method, true)
 
-        active_user = public_send(user_method)
+        user = public_send(user_method)
 
+        raise RailsIam::Authentication::Exceptions::AuthenticationError, token_error if user.nil?
+
+        user
+      end
+
+      def authorization_rule!
         rule = authorization_rule
 
         if rule.nil? || (rule.roles.empty? && rule.permissions.empty?)
           raise RailsIam::Authorization::Exceptions::AuthorizationError, authorization_rule_error
         end
 
-        authorize!(**rule.authorizer_arguments, user: active_user)
+        rule
       end
 
       def authorize!(
@@ -90,8 +104,18 @@ module RailsIam
       end
 
       def skip_authorization?
+        excluded_controller? || skipped_action?
+      end
+
+      def skipped_action?
         self.class.skip_authorization_rules.any? do |rule|
           rule.matches?(action_name)
+        end
+      end
+
+      def excluded_controller?
+        excluded_controller_patterns.any? do |pattern|
+          self.class.name.match?(pattern)
         end
       end
     end
