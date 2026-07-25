@@ -7,7 +7,8 @@ module RailsIam
                     :missing_permission_error,
                     :authorization_rule_error,
                     :cache_store,
-                    :cache_ttl
+                    :cache_ttl,
+                    :excluded_controller_patterns
 
       def initialize
         # Accepts plain Strings, dynamic blocks, or Lambdas with positional keywords.
@@ -24,6 +25,11 @@ module RailsIam
         # The store engine to cache resolved roles and permissions queries for low DB footprints.
         @cache_store = Rails.cache
         @cache_ttl = 15.minutes
+
+        # Useful for third-party gems and mounted engines (e.g. Devise)
+        # whose controllers inherit from ApplicationController but
+        # should bypass RailsIam authorization.
+        @excluded_controller_patterns = [/\ADevise::/]
       end
     end
   end

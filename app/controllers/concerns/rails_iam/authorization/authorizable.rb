@@ -11,8 +11,8 @@ module RailsIam
         class_attribute :authorization_rules, instance_accessor: false, default: []
         class_attribute :skip_authorization_rules, instance_accessor: false, default: []
         before_action :run_authorization!
-        rescue_from RailsIam::Authorization::Exceptions::ForbiddenError, with: :render_permission_error
-        rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_auth_error
+        rescue_from RailsIam::Authorization::Exceptions::AuthorizationError, with: :render_authorization_error
+        rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_authentication_error
       end
 
       class_methods do
@@ -53,19 +53,33 @@ module RailsIam
       def run_authorization!
         return if skip_authorization?
 
+        user = current_authenticated_user
+
+        rule = authorization_rule!
+
+        authorize!(**rule.authorizer_arguments, user: user)
+      end
+
+      def current_authenticated_user
         user_method = RailsIam.configuration.current_user_method
 
         raise RailsIam::Authentication::Exceptions::AuthenticationError, token_error unless respond_to?(user_method, true)
 
-        active_user = public_send(user_method)
+        user = public_send(user_method)
 
+        raise RailsIam::Authentication::Exceptions::AuthenticationError, token_error if user.nil?
+
+        user
+      end
+
+      def authorization_rule!
         rule = authorization_rule
 
         if rule.nil? || (rule.roles.empty? && rule.permissions.empty?)
-          raise RailsIam::Authorization::Exceptions::ForbiddenError, authorization_rule_error
+          raise RailsIam::Authorization::Exceptions::AuthorizationError, authorization_rule_error
         end
 
-        authorize!(**rule.authorizer_arguments, user: active_user)
+        rule
       end
 
       def authorize!(
@@ -90,8 +104,18 @@ module RailsIam
       end
 
       def skip_authorization?
+        excluded_controller? || skipped_action?
+      end
+
+      def skipped_action?
         self.class.skip_authorization_rules.any? do |rule|
           rule.matches?(action_name)
+        end
+      end
+
+      def excluded_controller?
+        excluded_controller_patterns.any? do |pattern|
+          self.class.name.match?(pattern)
         end
       end
     end

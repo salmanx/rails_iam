@@ -3,7 +3,7 @@
 module RailsIam
   module Authorization
     module Exceptions
-      class ForbiddenError < StandardError
+      class AuthorizationError < StandardError
       end
     end
   end

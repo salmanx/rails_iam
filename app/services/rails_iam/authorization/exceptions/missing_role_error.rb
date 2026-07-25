@@ -3,7 +3,7 @@
 module RailsIam
   module Authorization
     module Exceptions
-      class MissingRoleError < ForbiddenError
+      class MissingRoleError < AuthorizationError
         include RailsIam::ConfigLoader
 
         def initialize(required:, actual:)

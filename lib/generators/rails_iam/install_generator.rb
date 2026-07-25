@@ -21,18 +21,24 @@ module RailsIam
 
     def show_readme
       say "\n=======================================================", :yellow
-      say "IMPORTANT NEXT STEP:", :yellow
+      say " RailsIam installed successfully!", :green
       say "=======================================================", :yellow
-      say "1. Open config/initializers/rails_iam.rb", :green
-      say "2. Configure your user model mapping:", :green
-      say "   • If you have an existing authentication model (e.g., User, Member, or Admin),", :green
-      say "      - set 'config.user_class' to that model name string.", :green
-      say "      - set 'config.current_user_method' to :current_user or :current_member", :green
-      say "        that you used to refer authenticated user context.", :green
-      say "      - Add `include RailsIam::UserConcern` to that model"
-      say "   • If you want to use the default 'rails_iam' authentication,", :green
-      say "     leave the configuration as it is.", :green
-      say "3.  Run migrations:  bin/rails db:migrate", :green
+      say "Next steps:", :yellow
+      say ""
+      say "1. Open: config/initializers/rails_iam.rb", :green
+      say ""
+      say "2. Configure your user model if you have an existing authentication model:", :green
+      say "   • If you have existing authentication (Devise, Auth0, custom, etc.)", :green
+      say "     - config.user_class = 'User' (or Account, Member, Admin...)", :green
+      say "     - config.current_user_method = :current_user (or :current_account)", :green
+      say "     - Add `acts_as_rails_iam_user` to your user (or Account, Member, Admin...) authentication  model.", :green
+      say ""
+      say "   • If your use RailsIam authentication", :green
+      say "     - Keep the default configuration.", :green
+      say ""
+      say "3. Run: bin/rails db:migrate", :green
+      say ""
+      say "You're ready to start using RailsIam 🚀", :green
       say "=======================================================\n", :yellow
     end
 
