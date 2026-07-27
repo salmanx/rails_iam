@@ -69,7 +69,7 @@ module RailsIam
 
         raise RailsIam::Authentication::Exceptions::AuthenticationError, token_error if user.nil?
 
-        user
+        RailsIam::Authentication::Current.user ||= user
       end
 
       def authorization_rule!
