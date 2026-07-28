@@ -11,8 +11,8 @@ module RailsIam
         class_attribute :authorization_rules, instance_accessor: false, default: []
         class_attribute :skip_authorization_rules, instance_accessor: false, default: []
         before_action :run_authorization!
-        rescue_from RailsIam::Authorization::Exceptions::AuthorizationError, with: :render_authorization_error
-        rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_authentication_error
+        rescue_from RailsIam::Authorization::Exceptions::AuthorizationError, with: :render_rails_iam_authorization_error
+        rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_rails_iam_authentication_error
       end
 
       class_methods do
@@ -55,9 +55,20 @@ module RailsIam
 
         user = current_authenticated_user
 
-        rule = authorization_rule!
+        authorize_any!(authorization_rules!, user)
+      end
 
-        authorize!(**rule.authorizer_arguments, user: user)
+      def authorize_any!(rules, user)
+        last_error = nil
+
+        rules.each do |rule|
+          authorize!(**rule.authorizer_arguments, user: user)
+          return true
+        rescue RailsIam::Authorization::Exceptions::AuthorizationError => e
+          last_error = e
+        end
+
+        raise(last_error || RailsIam::Authorization::Exceptions::AuthorizationError.new)
       end
 
       def current_authenticated_user
@@ -72,14 +83,17 @@ module RailsIam
         user
       end
 
-      def authorization_rule!
-        rule = authorization_rule
-
-        if rule.nil? || (rule.roles.empty? && rule.permissions.empty?)
-          raise RailsIam::Authorization::Exceptions::AuthorizationError, authorization_rule_error
+      def authorization_rules!
+        rules = authorization_rules.reject do |rule|
+          rule.roles.empty? && rule.permissions.empty?
         end
 
-        rule
+        if rules.empty?
+          raise RailsIam::Authorization::Exceptions::AuthorizationError,
+                authorization_rule_error
+        end
+
+        rules
       end
 
       def authorize!(
@@ -97,8 +111,8 @@ module RailsIam
         )
       end
 
-      def authorization_rule
-        self.class.authorization_rules.find do |rule|
+      def authorization_rules
+        self.class.authorization_rules.select do |rule|
           rule.matches?(action_name)
         end
       end
