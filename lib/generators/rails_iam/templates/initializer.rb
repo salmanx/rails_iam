@@ -22,6 +22,11 @@ RailsIam.configure do |config|
   # - Default: :current_user
   # config.current_user_method = :current_user
 
+  # - The performer method that rails_iam use to track who creates and assign role/permission
+  # - Support symbol and proc
+  # - Default: :email
+  # config.audit_performer_method = :email
+
   # =========================================================================
   # Authentication Settings (config.authentication)
   # =========================================================================
