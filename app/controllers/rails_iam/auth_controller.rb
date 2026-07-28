@@ -22,7 +22,7 @@ module RailsIam
       if strategy_includes?(:bearer)
         render json: token_response_payload(result)
       else
-        render json: { user: result.user, roles: result.user.role_names, permissions: result.user.permission_codes }
+        render json: { user: result.user }
       end
     end
 

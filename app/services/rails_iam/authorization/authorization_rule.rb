@@ -9,7 +9,6 @@ module RailsIam
       :permission_match,
       :only,
       :except,
-      :infer_permission,
     ) do
       def matches?(action)
         action = action.to_sym
@@ -21,27 +20,17 @@ module RailsIam
         true
       end
 
-      def authorizer_arguments(controller_name:, action_name:)
+      def authorizer_arguments
         {
           required_roles: roles,
-          required_permissions: required_permissions(controller_name, action_name),
+          required_permissions: permissions,
           role_match: role_match,
           permission_match: permission_match,
         }
       end
 
       def valid?
-        roles.any? || permissions.any? || infer_permission
-      end
-
-      private
-
-      def required_permissions(controller_name, action_name)
-        return permissions unless infer_permission
-
-        [
-          "#{controller_name.tr('/', '_').singularize}:#{action_name}",
-        ]
+        roles.any? || permissions.any?
       end
     end
   end
