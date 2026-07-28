@@ -5,10 +5,11 @@ class CreateRailsIamTables < ActiveRecord::Migration[migration_version.to_f]
  
   def change
   
+   primary_key_type = Rails.application.config.generators.options.dig(:active_record, :primary_key_type) || :bigint
    user_class_name = RailsIam.configuration&.user_class || "RailsIam::User"
    user_table_name = user_class_name.underscore.pluralize.tr('/', '_')
 
-    create_table :rails_iam_users do |t|
+    create_table :rails_iam_users, id: primary_key_type do |t|
       t.string :email, index: { unique: true }
       t.string :password_digest
 
@@ -21,7 +22,7 @@ class CreateRailsIamTables < ActiveRecord::Migration[migration_version.to_f]
       t.timestamps
     end
 
-    create_table :rails_iam_roles do |t|
+    create_table :rails_iam_roles, id: primary_key_type do |t|
       t.string :name, index: { unique: true }
       t.text :description
 
@@ -34,7 +35,7 @@ class CreateRailsIamTables < ActiveRecord::Migration[migration_version.to_f]
       t.timestamps
     end
 
-    create_table :rails_iam_permissions do |t|
+    create_table :rails_iam_permissions, id: primary_key_type do |t|
       t.string :code, index: { unique: true }
       t.text :description
 
@@ -47,9 +48,9 @@ class CreateRailsIamTables < ActiveRecord::Migration[migration_version.to_f]
       t.timestamps
     end
 
-    create_table :rails_iam_user_roles do |t|
-      t.references :user, null: false,  foreign_key: { to_table: user_table_name }
-      t.references :role, null: false,  foreign_key: { to_table: :rails_iam_roles }
+    create_table :rails_iam_user_roles, id: primary_key_type do |t|
+      t.references :user, null: false, type: primary_key_type, foreign_key: { to_table: user_table_name }
+      t.references :role, null: false, type: primary_key_type, foreign_key: { to_table: :rails_iam_roles }
 
       # Custom Audit Tracking Columns
       t.string :created_by
@@ -61,9 +62,9 @@ class CreateRailsIamTables < ActiveRecord::Migration[migration_version.to_f]
     end
 
 
-    create_table :rails_iam_user_permissions do |t|
-      t.references :permission, null: false,  foreign_key: { to_table: :rails_iam_permissions }
-      t.references :user, null: false,  foreign_key: { to_table: user_table_name }
+    create_table :rails_iam_user_permissions, id: primary_key_type do |t|
+      t.references :permission, null: false, type: primary_key_type, foreign_key: { to_table: :rails_iam_permissions }
+      t.references :user, null: false, type: primary_key_type, foreign_key: { to_table: user_table_name }
 
       # Custom Audit Tracking Columns
       t.string :created_by
@@ -74,9 +75,9 @@ class CreateRailsIamTables < ActiveRecord::Migration[migration_version.to_f]
       t.timestamps
     end
 
-    create_table :rails_iam_role_permissions do |t|
-      t.references :permission, null: false,  foreign_key: { to_table: :rails_iam_permissions }
-      t.references :role, null: false,  foreign_key: { to_table: :rails_iam_roles }
+    create_table :rails_iam_role_permissions, id: primary_key_type do |t|
+      t.references :permission, null: false, type: primary_key_type, foreign_key: { to_table: :rails_iam_permissions }
+      t.references :role, null: false,  type: primary_key_type, foreign_key: { to_table: :rails_iam_roles }
 
       # Custom Audit Tracking Columns
       t.string :created_by
@@ -87,9 +88,9 @@ class CreateRailsIamTables < ActiveRecord::Migration[migration_version.to_f]
       t.timestamps
     end
 
-    create_table :rails_iam_user_denied_permissions do |t|
-      t.references :permission, null: false,  foreign_key: { to_table: :rails_iam_permissions }
-      t.references :user, null: false,  foreign_key: { to_table: user_table_name }
+    create_table :rails_iam_user_denied_permissions, id: primary_key_type do |t|
+      t.references :permission, null: false, type: primary_key_type,  foreign_key: { to_table: :rails_iam_permissions }
+      t.references :user, null: false, type: primary_key_type,  foreign_key: { to_table: user_table_name }
 
       # Custom Audit Tracking Columns
       t.string :created_by
@@ -100,8 +101,8 @@ class CreateRailsIamTables < ActiveRecord::Migration[migration_version.to_f]
       t.timestamps
     end
 
-    create_table :rails_iam_refresh_tokens do |t|
-      t.references :user, null: false,  foreign_key: { to_table: user_table_name }
+    create_table :rails_iam_refresh_tokens, id: primary_key_type do |t|
+      t.references :user, null: false, type: primary_key_type, foreign_key: { to_table: user_table_name }
       t.string :token_digest, index: { unique: true }
       t.datetime :expires_at, null: false
       # to invalidate the token
