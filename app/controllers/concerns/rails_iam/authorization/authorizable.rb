@@ -10,12 +10,17 @@ module RailsIam
       included do
         class_attribute :authorization_rules, instance_accessor: false, default: []
         class_attribute :skip_authorization_rules, instance_accessor: false, default: []
+        class_attribute :resource_authorization_enabled, instance_accessor: false, default: false
         before_action :run_authorization!
-        rescue_from RailsIam::Authorization::Exceptions::AuthorizationError, with: :render_authorization_error
-        rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_authentication_error
+        rescue_from RailsIam::Authorization::Exceptions::AuthorizationError, with: :render_rails_iam_authorization_error
+        rescue_from RailsIam::Authentication::Exceptions::AuthenticationError, with: :render_rails_iam_authentication_error
       end
 
       class_methods do
+        def authorize_resource
+          self.resource_authorization_enabled = true
+        end
+
         # rubocop:disable Metrics/ParameterLists
         def authorize(
           roles: [],
@@ -55,9 +60,24 @@ module RailsIam
 
         user = current_authenticated_user
 
-        rule = authorization_rule!
+        authorize_any!(authorization_rules!, user)
+      end
 
-        authorize!(**rule.authorizer_arguments, user: user)
+      def authorize_any!(rules, user)
+        last_error = nil
+
+        rules.each do |rule|
+          authorize!(
+            **rule.authorizer_arguments,
+            user: user,
+          )
+
+          return true
+        rescue RailsIam::Authorization::Exceptions::AuthorizationError => e
+          last_error = e
+        end
+
+        raise(last_error || RailsIam::Authorization::Exceptions::AuthorizationError.new)
       end
 
       def current_authenticated_user
@@ -72,14 +92,15 @@ module RailsIam
         RailsIam::Authentication::Current.user ||= user
       end
 
-      def authorization_rule!
-        rule = authorization_rule
+      def authorization_rules!
+        rules = authorization_rules.select(&:valid?)
 
-        if rule.nil? || (rule.roles.empty? && rule.permissions.empty?)
-          raise RailsIam::Authorization::Exceptions::AuthorizationError, authorization_rule_error
-        end
+        rules << inferred_authorization_rule if self.class.resource_authorization_enabled
 
-        rule
+        return rules if rules.any?
+
+        raise RailsIam::Authorization::Exceptions::AuthorizationError,
+              authorization_rule_error
       end
 
       def authorize!(
@@ -97,8 +118,8 @@ module RailsIam
         )
       end
 
-      def authorization_rule
-        self.class.authorization_rules.find do |rule|
+      def authorization_rules
+        self.class.authorization_rules.select do |rule|
           rule.matches?(action_name)
         end
       end
@@ -117,6 +138,26 @@ module RailsIam
         excluded_controller_patterns.any? do |pattern|
           self.class.name.match?(pattern)
         end
+      end
+
+      def inferred_authorization_rule
+        RailsIam::Authorization::AuthorizationRule.new(
+          roles: [],
+          permissions: [inferred_permission],
+          role_match: :any,
+          permission_match: :all,
+          only: nil,
+          except: nil,
+        )
+      end
+
+      def inferred_permission
+        resource =
+          self.class.controller_path
+              .tr("/", "_")
+              .singularize
+
+        "#{resource}:#{action_name}"
       end
     end
   end

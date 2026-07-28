@@ -28,6 +28,10 @@ module RailsIam
           permission_match: permission_match,
         }
       end
+
+      def valid?
+        roles.any? || permissions.any?
+      end
     end
   end
 end
