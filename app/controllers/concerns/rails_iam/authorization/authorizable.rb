@@ -25,6 +25,8 @@ module RailsIam
           only: nil,
           except: nil
         )
+          infer_permission = roles.empty? && permissions.empty? && only.nil? && except.nil?
+
           self.authorization_rules += [
             RailsIam::Authorization::AuthorizationRule.new(
               roles: Array(roles),
@@ -33,6 +35,7 @@ module RailsIam
               permission_match: permission_match,
               only: only,
               except: except,
+              infer_permission: infer_permission,
             ),
           ]
         end
@@ -62,7 +65,10 @@ module RailsIam
         last_error = nil
 
         rules.each do |rule|
-          authorize!(**rule.authorizer_arguments, user: user)
+          authorize!(**rule.authorizer_arguments(
+            controller_name: self.class.controller_path,
+            action_name: action_name,
+          ), user: user)
           return true
         rescue RailsIam::Authorization::Exceptions::AuthorizationError => e
           last_error = e
@@ -84,16 +90,12 @@ module RailsIam
       end
 
       def authorization_rules!
-        rules = authorization_rules.reject do |rule|
-          rule.roles.empty? && rule.permissions.empty?
-        end
+        rules = authorization_rules.select(&:valid?)
 
-        if rules.empty?
-          raise RailsIam::Authorization::Exceptions::AuthorizationError,
-                authorization_rule_error
-        end
+        return rules if rules.any?
 
-        rules
+        raise RailsIam::Authorization::Exceptions::AuthorizationError,
+              authorization_rule_error
       end
 
       def authorize!(
