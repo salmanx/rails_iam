@@ -12,7 +12,6 @@ module RailsIam
     def_delegators :"RailsIam.configuration.authentication",
                    :access_token_key,
                    :refresh_token_key,
-                   :cookie_options,
                    :token_error,
                    :token_expired_error,
                    :authentication_error,
@@ -31,6 +30,10 @@ module RailsIam
 
     def refresh_token_transport
       @refresh_token_transport ||= RailsIam.configuration.authentication.refresh_token_transport.to_sym
+    end
+
+    def cookie_options
+      @cookie_options ||= RailsIam.configuration.authentication.cookie_options.except(:value, :expires)
     end
 
     # Authorization configuration

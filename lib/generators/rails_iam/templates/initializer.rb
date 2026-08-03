@@ -87,7 +87,8 @@ RailsIam.configure do |config|
   # config.authentication.sign_out_path = '/auth/sign_out'
   # config.authentication.refresh_token_path = '/auth/refresh
 
-  # - Lifespan for the Access Token used
+  # - Lifespan for the Access Token used to set httponly cookie expiration
+  # - Keep the value sync jwt expiry time
   # - Default: 15.minutes
   # config.authentication.access_token_expires_in = 15.minutes
 
