@@ -9,17 +9,17 @@ module RailsIam
       end
 
       def call
-        return true if @context.required_permissions.empty?
+        return true if permissions.empty?
 
         success =
           case @context.permission_match
           when :any
-            @context.required_permissions.any? do |permission|
+            permissions.any? do |permission|
               @context.resolved_permissions.include?(permission)
             end
 
           when :all
-            @context.required_permissions.all? do |permission|
+            permissions.all? do |permission|
               @context.resolved_permissions.include?(permission)
             end
 
@@ -30,8 +30,12 @@ module RailsIam
         return true if success
 
         raise RailsIam::Authorization::Exceptions::MissingPermissionError.new(
-          required: @context.required_permissions,
+          required: permissions,
         )
+      end
+
+      def permissions
+        @context.permissions_for_check
       end
     end
   end

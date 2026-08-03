@@ -150,10 +150,6 @@ RailsIam.configure do |config|
   # config.jwt.issuer   = 'https://yourdomain.com'
   # config.jwt.audience = 'your_application_client_id'
 
-  # - How long an Access Token remains usable before forcing validation updates.
-  # - Default: 15.minutes
-  # config.jwt.access_token_expires_in = 15.minutes
-
   # - Lifespan for the Refresh Token used to request replacement access tokens.
   # - Default: 30.days
   # config.jwt.refresh_token_expires_in = 30.days

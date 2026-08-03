@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require "rails_iam/version"
-
+require "jwt"
+require "bcrypt"
 require "rails_iam/configuration"
 require "rails_iam/config/authorization"
 require "rails_iam/config/jwt"

@@ -9,6 +9,12 @@ module RailsIam
       g.fixture_replacement :factory_bot
     end
 
+    initializer "rails_iam.cookies" do |app|
+      next unless RailsIam.configuration.authentication.authentication_strategies.include?(:cookie)
+
+      app.middleware.use(ActionDispatch::Cookies)
+    end
+
     initializer "rails_iam.controller_dsl" do
       ActiveSupport.on_load(:action_controller_base) do
         include RailsIam::ControllerDsl
