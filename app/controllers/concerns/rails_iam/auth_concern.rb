@@ -22,7 +22,10 @@ module RailsIam
     end
 
     def extract_refresh_token
-      return extract_refresh_token_from_cookie if authentication_strategies.include?(:cookie)
+      if authentication_strategies.include?(:cookie)
+        token = extract_refresh_token_from_cookie
+        return token if token.present?
+      end
 
       case refresh_token_transport
       when :header
