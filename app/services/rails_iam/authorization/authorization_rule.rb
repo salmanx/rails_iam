@@ -20,10 +20,11 @@ module RailsIam
         true
       end
 
-      def authorizer_arguments
+      def authorizer_arguments(inferred_permission: nil)
         {
           required_roles: roles,
           required_permissions: permissions,
+          inferred_permission: inferred_permission,
           role_match: role_match,
           permission_match: permission_match,
         }

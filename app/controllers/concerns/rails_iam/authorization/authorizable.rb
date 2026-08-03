@@ -21,7 +21,6 @@ module RailsIam
           self.resource_authorization_enabled = true
         end
 
-        # rubocop:disable Metrics/ParameterLists
         def authorize(
           roles: [],
           permissions: [],
@@ -41,7 +40,6 @@ module RailsIam
             ),
           ]
         end
-        # rubocop:enable Metrics/ParameterLists
 
         def skip_authorization(only: nil, except: nil)
           self.skip_authorization_rules += [
@@ -68,7 +66,9 @@ module RailsIam
 
         rules.each do |rule|
           authorize!(
-            **rule.authorizer_arguments,
+            **rule.authorizer_arguments(
+              inferred_permission: inferred_permission_for(rule),
+            ),
             user: user,
           )
 
@@ -107,12 +107,14 @@ module RailsIam
         user:, required_roles: [],
         required_permissions: [],
         role_match: :any,
-        permission_match: :all
+        permission_match: :all,
+        inferred_permission: nil
       )
         RailsIam::Authorization::Authorizer.call(
           user: user,
           required_roles: required_roles,
           required_permissions: required_permissions,
+          inferred_permission: inferred_permission,
           role_match: role_match,
           permission_match: permission_match,
         )
@@ -158,6 +160,10 @@ module RailsIam
               .singularize
 
         "#{resource}:#{action_name}"
+      end
+
+      def inferred_permission_for(rule)
+        rule.permissions.any? ? nil : inferred_permission
       end
     end
   end

@@ -7,6 +7,7 @@ module RailsIam
         user:,
         required_roles: [],
         required_permissions: [],
+        inferred_permission: nil,
         role_match: :any,
         permission_match: :all
       )
@@ -16,12 +17,14 @@ module RailsIam
             user: user,
             required_roles: required_roles,
             required_permissions: required_permissions,
+            inferred_permission: inferred_permission,
             role_match: role_match,
             permission_match: permission_match,
           )
       end
 
       def call
+        DeniedPermissionChecker.call(@context)
         RoleChecker.call(@context)
         PermissionChecker.call(@context)
 
