@@ -34,7 +34,7 @@ module RailsIam
 
         # Session Strategy, allowing user to login from multiple device at the same time
         # Supported: :single || :multi
-        @session_strategy = :multi
+        @session_strategy = :single
 
         # Determines how RailsIam receives the refresh token for :bearer strategy
         # Supported: :header || :request_body

@@ -63,8 +63,8 @@ RailsIam.configure do |config|
   # - Session persistence limit strategy.
   #   [:single] - Forces one active device/session per user at any time (invalidates old tokens).
   #   [:multi]  - Allows concurrent login sessions across multiple devices or browsers.
-  # - Default: :multi
-  # config.authentication.session_strategy = :multi
+  # - Default: :single
+  # config.authentication.session_strategy = :single
 
   #
   # Built-in Authentication Routes
@@ -86,6 +86,14 @@ RailsIam.configure do |config|
   # config.authentication.sign_in_path = '/auth/sign_in'
   # config.authentication.sign_out_path = '/auth/sign_out'
   # config.authentication.refresh_token_path = '/auth/refresh
+
+  # - Lifespan for the Access Token used
+  # - Default: 15.minutes
+  # config.authentication.access_token_expires_in = 15.minutes
+
+  # - Lifespan for the Refresh Token used to request replacement access tokens.
+  # - Default: 30.days
+  # config.authentication.refresh_token_expires_in = 30.days
 
   # - Custom system error messages emitted during authentication edge cases.
   # - Configure the error messages if you need different messages
@@ -149,8 +157,4 @@ RailsIam.configure do |config|
   # - You can also dynamically set them in `extra_claims` at `JwtEncoder`
   # config.jwt.issuer   = 'https://yourdomain.com'
   # config.jwt.audience = 'your_application_client_id'
-
-  # - Lifespan for the Refresh Token used to request replacement access tokens.
-  # - Default: 30.days
-  # config.jwt.refresh_token_expires_in = 30.days
 end
