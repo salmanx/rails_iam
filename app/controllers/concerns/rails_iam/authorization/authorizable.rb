@@ -137,7 +137,7 @@ module RailsIam
       end
 
       def excluded_controller?
-        excluded_controller_patterns.any? do |pattern|
+        (excluded_controller_patterns || []).any? do |pattern|
           self.class.name.match?(pattern)
         end
       end

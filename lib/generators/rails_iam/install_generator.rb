@@ -33,7 +33,7 @@ module RailsIam
       say "     - config.current_user_method = :current_user (or :current_account)", :green
       say "     - Add `acts_as_rails_iam_user` to your user (or Account, Member, Admin...) authentication  model.", :green
       say ""
-      say "   • If your use RailsIam authentication", :green
+      say "   • If you use RailsIam authentication", :green
       say "     - Keep the default configuration.", :green
       say ""
       say "3. Run: bin/rails db:migrate", :green
