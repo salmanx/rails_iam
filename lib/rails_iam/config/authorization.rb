@@ -29,7 +29,7 @@ module RailsIam
         # Useful for third-party gems and mounted engines (e.g. Devise)
         # whose controllers inherit from ApplicationController but
         # should bypass RailsIam authorization.
-        @excluded_controller_patterns = [/\ADevise::/]
+        @excluded_controller_patterns = []
       end
     end
   end
