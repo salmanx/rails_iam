@@ -1,5 +1,7 @@
 # RailsIAM
 
+JWT • RBAC • PBAC • IAM • Roles • Permissions
+
 RailsIAM is a database-driven Identity & Access Management (IAM) engine for your Rails applications. It follows an endpoint-first authorization model where permissions are treated as data, not code. Roles and permission assignments are stored in the database, allowing access control to evolve without changing authorization logic. RailsIAM includes an optional JWT authentication implementation for applications that need it, while its authorization layer works with Devise or any authentication system capable of providing the authenticated user.
 
 ## Why RailsIAM exists?
