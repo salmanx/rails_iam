@@ -1,6 +1,6 @@
-# Contributing to Rails IAM
+# Contributing to RailsIAM
 
-First of all, thank you for your interest in contributing to Rails IAM! 🎉
+First of all, thank you for your interest in contributing to RailsIAM! 🎉
 
 Whether you're reporting a bug, improving documentation, fixing a typo, or implementing a new feature, your contribution is greatly appreciated.
 
@@ -23,7 +23,7 @@ When opening a bug report, please include as much information as possible:
 
 - Rails version
 - Ruby version
-- Rails IAM version
+- RailsIAM version
 - Authentication strategy
 - Database adapter
 - Steps to reproduce
@@ -35,7 +35,7 @@ When opening a bug report, please include as much information as possible:
 
 # Feature Requests
 
-Rails IAM aims to remain simple, predictable, and database-driven.
+RailsIAM aims to remain simple, predictable, and database-driven.
 
 If you'd like to propose a new feature:
 
@@ -122,7 +122,7 @@ Please follow the existing project conventions:
 
 Every new feature or bug fix should include appropriate tests whenever possible.
 
-Rails IAM uses RSpec for testing.
+RailsIAM uses RSpec for testing.
 
 ---
 
