@@ -145,7 +145,7 @@ Or only for selected actions.
 skip_authorization only: :sign_up
 ```
 
-More example [here](/wiki/Authorization-Rules).
+More example [here](https://github.com/salmanx/rails_iam/wiki/Authorization-Rules).
 
 ---
 
@@ -179,12 +179,13 @@ Our controllers and models stay focused on handling requests and business logic 
 
 ## Continue Reading
 
-- [Getting Started](/wiki/Getting-Started)
-- [Authentication](/wiki/Authentication)
-- [Authorization](/wiki/Authorization)
-- [Authorization Rules](/wiki/Authorization-Rules)
-- [Configuration](/wiki/Configuration)
-- [Testing controller](/wiki/Testing-Controller)
+- [Getting Started](https://github.com/salmanx/rails_iam/wiki)
+- [Authentication](https://github.com/salmanx/rails_iam/wiki/Authentication)
+- [Authorization](https://github.com/salmanx/rails_iam/wiki/Authorization)
+- [Authorization Rules](https://github.com/salmanx/rails_iam/wiki/Authorization-Rules)
+- [Configuration](https://github.com/salmanx/rails_iam/wiki/Configuration)
+- [Testing Controller and Request Authorization](https://github.com/salmanx/rails_iam/wiki/Testing-Controller-and-Request-Authorization)
+- [With devise and traditional rails](https://github.com/salmanx/rails_iam/wiki/With-devise-and-traditional-rails)
 
 ## Contributing
 
