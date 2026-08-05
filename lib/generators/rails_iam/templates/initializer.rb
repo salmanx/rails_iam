@@ -136,7 +136,8 @@ RailsIam.configure do |config|
   # - Use this when a third-party library or Rails engine (such as Devise, or another mounted engine) provides controllers
   # - that inherit from your ApplicationController but should not be subject to RailsIam authorization.
   # - Example: [/\ADevise::/, /\ARailsIam::/]
-  # config.authorization.excluded_controller_patterns = [/\ADevise]
+  # - Default []
+  # config.authorization.excluded_controller_patterns = []
 
   # =========================================================================
   # JWT Cryptography Settings (config.jwt)

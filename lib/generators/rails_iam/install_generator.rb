@@ -31,7 +31,6 @@ module RailsIam
       say "   • If you have existing authentication (Devise, Auth0, custom, etc.)", :green
       say "     - config.user_class = 'User' (or Account, Member, Admin...)", :green
       say "     - config.current_user_method = :current_user (or :current_account)", :green
-      say "     - config.authorization.excluded_controller_patterns = [/\ADevise::/]", :green
       say "     - Add `acts_as_rails_iam_user` to your user (or Account, Member, Admin...) authentication  model.", :green
       say ""
       say "   • If you use RailsIam authentication", :green
