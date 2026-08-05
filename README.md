@@ -177,9 +177,13 @@ Our controllers and models stay focused on handling requests and business logic 
 
 ## Continue Reading
 
-- [Getting Start](/wiki/Getting-Start)
+- [Getting Started](/wiki/Getting-Started)
 - [Authentication](/wiki/Authentication)
 - [Authorization](/wiki/Authorization)
 - [Authorization Rules](/wiki/Authorization-Rules)
 - [Configuration](/wiki/Configuration)
-- [Test](/wiki/Test)
+- [Testing controller](/wiki/Testing-Controller)
+
+## Contributing
+
+Please read the [Contributing Guidelines](https://github.com/salmanx/rails_iam/blob/main/CONTRIBUTING.md).
